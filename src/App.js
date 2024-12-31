@@ -1,35 +1,41 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import './App.css';
 
 import { Fireworks } from '@fireworks-js/react'
+import Countdown from 'react-countdown';
+
+const Completionist = () => <span>You are good to go!</span>;
 
 function App() {
-
+  const [display, setDisplay] = useState(false);
   const ref = useRef(null);
   const toggle = () => {
-    if (!ref.current) return
-    if (ref.current.isRunning) {
-      ref.current.stop()
-    } else {
-      ref.current.start()
-    }
+    // if (ref.current.isRunning) {
+    //   ref.current.stop()
+    // } else {
+    //   ref.current.start()
+    // }
+    setDisplay(!display);
   }
 
   return (
     <>
-    <div
-      style={{ display: 'flex', gap: '4px', position: 'absolute', zIndex: 1 }}
-    >
-      <button onClick={() => toggle()}>Toggle</button>
-      <button onClick={() => ref.current.clear()}>Clear</button>
-    </div>
+          <div
+        style={{ display: 'flex', position: 'relative', zIndex: 99 }}>
+        {!display? <button className='button' onClick={() => toggle()}>Toggle</button> : <div></div>}
+        {display? <div style={{height: '100vh'}} ><p className='card'>hello</p></div> : <div></div>}
+      </div>
     <Fireworks
       ref={ref}
       options={{ 
-        acceleration: 1.0,
+        acceleration: 1,
         delay: {
           min: 30,
           max: 60
+        },
+        rocketsPoint: {
+          min: 10,
+          max: 80
         },
         autoresize: true,
         opacity: 0.5,
@@ -55,7 +61,6 @@ function App() {
         width: '100%',
         height: '100%',
         position: 'fixed',
-        background: '#000'
       }}
     />
   </>
