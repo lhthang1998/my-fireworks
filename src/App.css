@@ -29,18 +29,7 @@
 }
 
 
-.card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -50px;
-  margin-left: -50px;
-  width: 100px;
-  height: 100px;
+.my-button {
   color: white;
-}
-
-.button {
-  width: 10%;
-  height: 10%;
+  margin-top: 10px;
 }
