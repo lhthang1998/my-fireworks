@@ -70,6 +70,25 @@ To you, and to all the memories we’ll create together in the coming year 2025 
         stopFirework();
       } 
   }
+  console.log(diff / 1000);
+  if (diff / 1000 <  -600 ) {
+     return (
+      <div style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center', top: '50%'}}>
+      {!display? 
+        <IconButton onClick={toggle} size='lg' className='my-button' icon={<EmailIcon boxSize={10}></EmailIcon>}></IconButton>: <div></div>
+      }
+      <Modal isOpen={isOpen} onClose={toggleClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+          <Text noOfLines={100}>{text}</Text>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </div>
+     )
+  }
 
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
