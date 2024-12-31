@@ -9,37 +9,107 @@ import {
   ModalBody,
   ModalCloseButton,
   IconButton,
-  Text,
+  Text, CircularProgress, CircularProgressLabel,
   useDisclosure
 } from '@chakra-ui/react'
 
-import { EmailIcon } from '@chakra-ui/icons'
+import { EmailIcon } from '@chakra-ui/icons';
+import Countdown from 'react-countdown';
 
 function App() {
+
+  const newYear = new Date("2024-01-01T00:00:00+07:00");
+
+  const text = `
+  🎉 Happy New Year! 🎉
+
+May this year bring you all the luck, love, and joy that you deserve. 
+
+May every day be filled with new opportunities, every challenge be an opportunity for growth, and every moment be a step toward achieving your dreams. 🌟
+
+May you always feel loved, beautiful, and cherished, because you truly are. 💕
+
+Wishing you a year full of peace, health, and success, with every blessing and good fortune coming your way. 🍀
+
+Here's to a year of exciting adventures, wonderful surprises, and making beautiful memories. May your heart be full and your worries be few! 🥂✨
+
+To you, and to all the memories we’ll create together in the coming year 2025 🌸✨!
+  `;
+  
+  var diff =  newYear.getTime() - new Date().getTime();
   const [display, setDisplay] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const ref = useRef(null);
+  
+  const Completionist = () => {
+    startFirework();
+    return <IconButton onClick={toggle} size='lg' className='my-button' icon={<EmailIcon boxSize={10}></EmailIcon>}></IconButton>
+  };
+
+  const startFirework = () => {
+    ref.current.start();
+  }
+
+  const stopFirework = () => {
+    ref.current.stop();
+  }
+
   const toggle = () => {
-    // if (ref.current.isRunning) {
-    //   ref.current.stop()
-    // } else {
-    //   ref.current.start()
-    // }
     onOpen();
     setDisplay(!display);
   }
+  
+  const toggleClose = () => {
+    onClose();
+    setDisplay(false);
+  }
+
+  const checkDate = () => {
+    console.log('x');
+    var localDiff =  newYear.getTime() - new Date().getTime();
+    console.log(localDiff / 1000);
+      if (localDiff / 1000 < 300) {
+        stopFirework();
+      } 
+  }
+
+
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return <Completionist />;
+    } else {
+      return (
+        <div>
+          <CircularProgress value={hours*100/24} color='green.400' thickness='3px'size='120px'>
+            <CircularProgressLabel><Text className='my-text'>{hours} h</Text></CircularProgressLabel>
+          </CircularProgress>
+          <CircularProgress value={minutes*100/60} color='green.400' thickness='3px'size='120px'>
+            <CircularProgressLabel><Text className='my-text'>{minutes} m</Text></CircularProgressLabel>
+          </CircularProgress>
+          <CircularProgress value={seconds*100/60} color='green.400' thickness='3px'size='120px'>
+            <CircularProgressLabel><Text className='my-text'>{seconds} s</Text></CircularProgressLabel>
+          </CircularProgress>
+        </div>
+      )
+    }
+  };
 
   return (
     <>
-      <div
-        style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center'}}>
-        {!display? <IconButton onClick={toggle} colorScheme='red' className='my-button' icon={<EmailIcon/>}></IconButton> : <div></div>}
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <div style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center', top: '50%'}}>
+        {!display? diff > 0?         
+          <Countdown date={Date.now() + 3000} onStart={stopFirework} renderer={renderer} onTick={checkDate}>
+            <Completionist/>
+          </Countdown> : 
+          <IconButton onClick={toggle} size='lg' className='my-button' icon={<EmailIcon boxSize={10}></EmailIcon>}></IconButton>: <div></div>
+        }
+        <Modal isOpen={isOpen} onClose={toggleClose} isCentered>
           <ModalOverlay />
           <ModalContent>
             <ModalCloseButton />
             <ModalBody>
-            <Text>View a summary of all your customers over the last month.</Text>
+            <Text noOfLines={100}>{text}</Text>
             </ModalBody>
           </ModalContent>
         </Modal>
