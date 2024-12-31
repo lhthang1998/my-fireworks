@@ -18,7 +18,7 @@ import Countdown from 'react-countdown';
 
 function App() {
 
-  const newYear = new Date("2024-01-01T00:00:00+07:00");
+  const newYear = new Date("2025-01-01T00:00:00+07:00");
 
   const text = `
   🎉 Happy New Year! 🎉
@@ -65,14 +65,11 @@ To you, and to all the memories we’ll create together in the coming year 2025 
   }
 
   const checkDate = () => {
-    console.log('x');
     var localDiff =  newYear.getTime() - new Date().getTime();
-    console.log(localDiff / 1000);
-      if (localDiff / 1000 < 300) {
+      if (localDiff / 1000 < 100) {
         stopFirework();
       } 
   }
-
 
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -99,7 +96,7 @@ To you, and to all the memories we’ll create together in the coming year 2025 
     <>
       <div style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center', top: '50%'}}>
         {!display? diff > 0?         
-          <Countdown date={Date.now() + 3000} onStart={stopFirework} renderer={renderer} onTick={checkDate}>
+          <Countdown date={Date.now() + diff} onStart={stopFirework} renderer={renderer} onTick={checkDate}>
             <Completionist/>
           </Countdown> : 
           <IconButton onClick={toggle} size='lg' className='my-button' icon={<EmailIcon boxSize={10}></EmailIcon>}></IconButton>: <div></div>
