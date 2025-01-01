@@ -108,16 +108,16 @@ To you, and to all the memories we’ll create together in the coming year 2025 
     } else {
       return (
         <div>
-          <CircularProgress value={days*100/getDaysInYear(year)} color='green.400' thickness='3px'size='120px'>
+          <CircularProgress value={days*100/getDaysInYear(year)} color='green.400' thickness='3px'size='150px'>
             <CircularProgressLabel><Text className='my-text'>{days} d</Text></CircularProgressLabel>
           </CircularProgress>
-          <CircularProgress value={hours*100/24} color='green.400' thickness='3px'size='120px'>
+          <CircularProgress value={hours*100/24} color='green.400' thickness='3px'size='150px'>
             <CircularProgressLabel><Text className='my-text'>{hours} h</Text></CircularProgressLabel>
           </CircularProgress>
-          <CircularProgress value={minutes*100/60} color='green.400' thickness='3px'size='120px'>
+          <CircularProgress value={minutes*100/60} color='green.400' thickness='3px'size='150px'>
             <CircularProgressLabel><Text className='my-text'>{minutes} m</Text></CircularProgressLabel>
           </CircularProgress>
-          <CircularProgress value={seconds*100/60} color='green.400' thickness='3px'size='120px'>
+          <CircularProgress value={seconds*100/60} color='green.400' thickness='3px'size='150px'>
             <CircularProgressLabel><Text className='my-text'>{seconds} s</Text></CircularProgressLabel>
           </CircularProgress>
         </div>
