@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import './App.css';
-
+import { Cron } from "croner";
 import { Fireworks } from '@fireworks-js/react'
 import {
   Modal,
@@ -16,9 +16,21 @@ import {
 import { EmailIcon } from '@chakra-ui/icons';
 import Countdown from 'react-countdown';
 
-function App() {
+function getDaysInYear(year) {
+  // Check if the year is a leap year
+  const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
 
-  const newYear = new Date("2025-01-01T00:00:00+07:00");
+  // Return 366 for leap years, 365 for common years
+  return isLeapYear ? 366 : 365;
+}
+
+function isOver10Minutes(diff) {
+  return diff / 1000 <= -600;
+}
+
+function App() {
+  const year = 2026;
+  const newYear = new Date(year + "-01-01T00:00:00+07:00");
 
   const text = `
   🎉 Happy New Year! 🎉
@@ -64,39 +76,41 @@ To you, and to all the memories we’ll create together in the coming year 2025 
     setDisplay(false);
   }
 
-  const checkDate = () => {
-    var localDiff =  newYear.getTime() - new Date().getTime();
-      if (localDiff / 1000 < 100) {
-        stopFirework();
-      } 
-  }
-  console.log(diff / 1000);
-  if (diff / 1000 <  -600 ) {
-     return (
-      <div style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center', top: '50%'}}>
-      {!display? 
-        <IconButton onClick={toggle} size='lg' className='my-button' icon={<EmailIcon boxSize={10}></EmailIcon>}></IconButton>: <div></div>
-      }
-      <Modal isOpen={isOpen} onClose={toggleClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody>
-          <Text noOfLines={100}>{text}</Text>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </div>
-     )
-  }
+  const job = new Cron('*/10 * * * *', () => {
+    if (isOver10Minutes(diff)) {
+      ref.current.stop();
+    }
+  });
+  
+  if (isOver10Minutes(diff)) {
+    return (
+     <div style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center', top: '50%'}}>
+     {!display? 
+       <IconButton onClick={toggle} size='lg' className='my-button' icon={<EmailIcon boxSize={10}></EmailIcon>}></IconButton>: <div></div>
+     }
+     <Modal isOpen={isOpen} onClose={toggleClose} isCentered>
+       <ModalOverlay />
+       <ModalContent>
+         <ModalCloseButton />
+         <ModalBody>
+         <Text noOfLines={100}>{text}</Text>
+         </ModalBody>
+       </ModalContent>
+     </Modal>
+   </div>
+    )
+ }
 
-  const renderer = ({ hours, minutes, seconds, completed }) => {
+  const renderer = ({days, hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
       return <Completionist />;
     } else {
       return (
         <div>
+          <CircularProgress value={days*100/getDaysInYear(year)} color='green.400' thickness='3px'size='120px'>
+            <CircularProgressLabel><Text className='my-text'>{days} d</Text></CircularProgressLabel>
+          </CircularProgress>
           <CircularProgress value={hours*100/24} color='green.400' thickness='3px'size='120px'>
             <CircularProgressLabel><Text className='my-text'>{hours} h</Text></CircularProgressLabel>
           </CircularProgress>
@@ -113,9 +127,9 @@ To you, and to all the memories we’ll create together in the coming year 2025 
 
   return (
     <>
-      <div style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center', top: '50%'}}>
+      <div style={{ display: 'flex', position: 'relative', zIndex: 99999, justifyContent: 'center', top: '40%'}}>
         {!display? diff > 0?         
-          <Countdown date={Date.now() + diff} onStart={stopFirework} renderer={renderer} onTick={checkDate}>
+          <Countdown date={Date.now() + diff} onStart={stopFirework} renderer={renderer}>
             <Completionist/>
           </Countdown> : 
           <IconButton onClick={toggle} size='lg' className='my-button' icon={<EmailIcon boxSize={10}></EmailIcon>}></IconButton>: <div></div>

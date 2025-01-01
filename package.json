@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.14.0",
     "@fireworks-js/react": "^2.10.8",
     "cra-template": "1.2.0",
+    "croner": "^9.0.0",
     "framer-motion": "^11.15.0",
     "react": "^19.0.0",
     "react-countdown": "^2.3.6",
